@@ -11,7 +11,7 @@
     <div class="container">
       <h1>Good Morning!</h1>
       <div class="main_weather">
-        <h2>Singapore</h2>
+        <h2 id="user_current_location">User Current Location</h2>
         <input
           id="query"
           name="q"
@@ -21,15 +21,18 @@
           required
         />
         <button>Search</button>
-        <h3>Current weather forecast</h3>
+        <h3>Current Weather</h3>
         <table>
-          <th>Temperature</th>
-          <th>Forecast</th>
           <tr>
-            <td>5 degrees</td>
-            <td>Rainy</td>
+            <td id="current_weather">Current Weather</td>
+          </tr>
+          <tr>
+            <td id="current_temp">Temperature</td>
+            <td id="feels_like">Feels Like</td>
           </tr>
         </table>
+        <h3>Next 12 Hours Forecast</h3>
+        <table id="hour_forecast"></table>
       </div>
     </div>
     <script src="script.js" charset="utf-8 "></script>
