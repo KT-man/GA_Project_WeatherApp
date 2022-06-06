@@ -2,8 +2,6 @@ sunny_1 - Photo by Neda Astani on Unsplash - https://unsplash.com/photos/KWTkd7m
 sunny_2 - Photo by Mehdi MeSSrro on Unsplash - https://unsplash.com/photos/TKlxhlRdj9A?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 sunny_3 - Photo by todd kent on Unsplash - https://unsplash.com/photos/jqXiBG2VDeA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 
-
-
 rainy_1 - Photo by Valentine Muller on Unsplash - https://unsplash.com/photos/bWtd1ZyEy6w
 rainy_2 - Photo by Joy Stamp on Unsplash - https://unsplash.com/photos/pGQbWXBC1dA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 rainy_3 - Photo by Ohmky on Unsplash - https://unsplash.com/photos/uEusW9AW7QU?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
