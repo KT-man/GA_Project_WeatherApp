@@ -1,4 +1,6 @@
 "use strict";
+//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
+
 const api_key = "0d32655573f280eaa5d85c7e6fa638a5";
 //Mapping taken from https://github.com/erikflowers/weather-icons/issues/204
 const wiToOWM = {
@@ -279,6 +281,7 @@ document.querySelector("#search").addEventListener("click", function () {
         let forecast_time = document.createElement("td");
         let forecast_temp = document.createElement("td");
         let forecast_weather = document.createElement("td");
+        let icon = document.createElement("i");
 
         // Time is stored as Unix
         let weatherTime = weatherData["hourly"][i]["dt"];
@@ -299,9 +302,19 @@ document.querySelector("#search").addEventListener("click", function () {
         forecast_weather.innerHTML =
           weatherData["hourly"][i]["weather"][0]["main"];
 
+        let iconType = "";
+        let hourly_weather_id = weatherData["hourly"][i]["weather"][0]["id"];
+        console.log(hourly_weather_id);
+        console.log(wiToOWM[hourly_weather_id]);
+        iconType = `wi-${wiToOWM[hourly_weather_id]}`;
+
+        icon.classList.add("wi", iconType);
+        forecast_weather.append(icon);
+
         forecast_div.append(forecast_time, forecast_weather, forecast_temp);
         forecast_table.appendChild(forecast_div);
       }
+
       //Easy way to add toggle to 7-day forecast would be to add the toggle button to the getLocationWeather() function.
       //Toggle button only appears after user has searched
       let day_forecast = document.getElementById("day_forecast");
@@ -314,25 +327,33 @@ document.querySelector("#search").addEventListener("click", function () {
         let day_forecast_date = document.createElement("td");
         let day_forecast_temp = document.createElement("td");
         let day_forecast_weather = document.createElement("td");
+        let icon = document.createElement("i");
 
         // Time is stored as Unix
         let weatherTime = weatherData["daily"][i]["dt"];
         //Convert from Unix by inputting milliseconds into new Date() method. Convert by multiplying by 1000
         weatherTime = weatherTime * 1000;
         weatherTime = new Date(weatherTime);
-        weatherTime = weatherTime.toLocaleTimeString([], {
+        weatherTime = weatherTime.toLocaleDateString([], {
+          day: "numeric",
           month: "long",
-          day: "2-digit",
-          //   hour: "numeric",
-          //   minute: "numeric",
         });
 
         day_forecast_date.innerHTML = weatherTime;
-        day_forecast_temp.innerHTML = `${Math.ceil(
-          weatherData["hourly"][i]["temp"]
+        day_forecast_temp.innerHTML = `Min:${Math.ceil(
+          weatherData["daily"][i]["temp"]["min"]
+        )}&#176C, Max:${Math.ceil(
+          weatherData["daily"][i]["temp"]["max"]
         )}&#176C`;
         day_forecast_weather.innerHTML =
-          weatherData["hourly"][i]["weather"][0]["main"];
+          weatherData["daily"][i]["weather"][0]["main"];
+
+        let iconType = "";
+        let daily_weather_id = weatherData["daily"][i]["weather"][0]["id"];
+        iconType = `wi-${wiToOWM[daily_weather_id]}`;
+
+        icon.classList.add("wi", iconType);
+        day_forecast_weather.append(icon);
 
         day_forecast_div.append(
           day_forecast_date,
@@ -352,7 +373,7 @@ document.querySelector("#search").addEventListener("click", function () {
           document.getElementById("query_type").innerText = "7-Day Forecast";
           day_forecast.classList.remove("hidden");
           forecast_table.classList.add("hidden");
-        } else {
+        } else if (toggle_button.innerText === "12-Hour Forecast") {
           forecast_table.classList.remove("hidden");
           day_forecast.classList.add("hidden");
           document.getElementById("query_type").innerText = "12-Hour Forecast";
