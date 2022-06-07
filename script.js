@@ -365,19 +365,23 @@ document.querySelector("#search").addEventListener("click", function () {
 
       document.getElementById("day_forecast").classList.add("hidden");
 
+      console.log(weatherData);
       //Adding event listener to button to toggle
       const toggle_button = document.getElementById("toggle_hour_day");
+
       toggle_button.addEventListener("click", function () {
         if (toggle_button.innerText === "7-Day Forecast") {
           toggle_button.innerText = "12-Hour Forecast";
           document.getElementById("query_type").innerText = "7-Day Forecast";
           day_forecast.classList.remove("hidden");
           forecast_table.classList.add("hidden");
+          console.log("7Day");
         } else if (toggle_button.innerText === "12-Hour Forecast") {
           forecast_table.classList.remove("hidden");
           day_forecast.classList.add("hidden");
           document.getElementById("query_type").innerText = "12-Hour Forecast";
           toggle_button.innerText = "7-Day Forecast";
+          console.log("12hour");
         }
       });
     } catch (err) {
