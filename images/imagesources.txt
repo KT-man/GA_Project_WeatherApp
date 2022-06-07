@@ -2,11 +2,19 @@ sunny_1 - Photo by Neda Astani on Unsplash - https://unsplash.com/photos/KWTkd7m
 sunny_2 - Photo by Mehdi MeSSrro on Unsplash - https://unsplash.com/photos/TKlxhlRdj9A?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 sunny_3 - Photo by todd kent on Unsplash - https://unsplash.com/photos/jqXiBG2VDeA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 
-rainy_1 - Photo by Valentine Muller on Unsplash - https://unsplash.com/photos/bWtd1ZyEy6w
-rainy_2 - Photo by Joy Stamp on Unsplash - https://unsplash.com/photos/pGQbWXBC1dA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-rainy_3 - Photo by Ohmky on Unsplash - https://unsplash.com/photos/uEusW9AW7QU?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-rainy_4 - Photo by Priscilla Du Preez on Unsplash - https://unsplash.com/photos/x7qj_D4dOzM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+rain_1 - Photo by Valentine Muller on Unsplash - https://unsplash.com/photos/bWtd1ZyEy6w
+rain_2 - Photo by Joy Stamp on Unsplash - https://unsplash.com/photos/pGQbWXBC1dA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
 
-cloudy_1 - Photo by 🇻🇪 Jose G. Ortega Castro 🇲🇽 on Unsplash - https://unsplash.com/photos/tS4Pl_8F3fY?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-cloudy_2 - Photo by Margaux Bellott on Unsplash - https://unsplash.com/photos/WNULR7wsGvg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
-cloudy_3 - Photo by Christopher Burns on Unsplash - https://unsplash.com/photos/7Bt2wFY3l8o?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+drizzle_1 - Photo by Ohmky on Unsplash - https://unsplash.com/photos/uEusW9AW7QU?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+drizzle_2 - Photo by Priscilla Du Preez on Unsplash - https://unsplash.com/photos/x7qj_D4dOzM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
+clouds_1 - Photo by 🇻🇪 Jose G. Ortega Castro 🇲🇽 on Unsplash - https://unsplash.com/photos/tS4Pl_8F3fY?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+clouds_2 - Photo by Margaux Bellott on Unsplash - https://unsplash.com/photos/WNULR7wsGvg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+clouds_3 - Photo by Christopher Burns on Unsplash - https://unsplash.com/photos/7Bt2wFY3l8o?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
+thunderstorm_1 - Photo by Tasos Mansour on Unsplash -  https://unsplash.com/photos/_hGPdpyMV-8?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+thunderstorm_2 - Photo by Johannes Plenio on Unsplash - https://unsplash.com/photos/E-Zuyev2XWo?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+
+snow_1 - Photo by Adam Chang on Unsplash - https://unsplash.com/photos/IWenq-4JHqo?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+snow_2 - Photo by Jessica Fadel on Unsplash - https://unsplash.com/photos/SH4GNXNj1RA?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink
+

@@ -1,8 +1,39 @@
-table {
-  border: 1px black solid;
+body {
+  background-image: url("../images/clear/clear_1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
-td {
-  border: 1px black solid;
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
+}
+
+#current_div {
+  border: 2px solid black;
+  border-radius: 20px;
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+}
+
+#forecast_div {
+  border: 2px solid black;
+  border-radius: 20px;
+  display: inline-block;
+  padding: 10px;
+  margin: 30px;
+  /*Weird behavior with Margin, if margin is too small, the table rows don't display on individual rows*/
+}
+
+table {
+  border-collapse: separate;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 100%;
 }
 
 #seven_day {
@@ -11,4 +42,9 @@ td {
 
 .hidden {
   visibility: collapse;
+}
+
+.wi {
+  font-size: 2.5em;
+  display: inline-block;
 }

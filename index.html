@@ -12,6 +12,12 @@
       type="text/css"
       href="css/weather-icons-wind.min.css"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <div class="container">
@@ -27,20 +33,27 @@
           required
         />
         <button id="search">Search</button>
-        <h3>Current Weather</h3>
-        <table>
-          <tr>
-            <td id="current_weather">Current Weather</td>
-          </tr>
-          <tr>
-            <td id="current_temp">Temperature</td>
-            <td id="feels_like">Feels Like</td>
-          </tr>
-        </table>
-        <h3 id="query_type">12 Hour Forecast</h3>
-        <table id="hour_forecast"></table>
-        <table id="day_forecast"></table>
-        <button id="toggle_hour_day">7-Day Forecast</button>
+        <br />
+        <div id="current_div">
+          <h3>Current Weather</h3>
+          <table class="table table-borderless">
+            <tr>
+              <td id="current_weather">Current Weather</td>
+              <td id="weather_icon"></td>
+            </tr>
+            <tr>
+              <td id="current_temp">Temperature</td>
+              <td id="feels_like">Feels Like</td>
+            </tr>
+          </table>
+        </div>
+        <br />
+        <div id="forecast_div">
+          <h3 id="query_type">12 Hour Forecast</h3>
+          <table id="hour_forecast" class="table table-borderless"></table>
+          <table id="day_forecast" class="table table-borderless"></table>
+          <button id="toggle_hour_day">7-Day Forecast</button>
+        </div>
       </div>
     </div>
     <script src="script.js" charset="utf-8 "></script>

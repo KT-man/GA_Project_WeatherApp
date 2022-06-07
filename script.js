@@ -282,19 +282,29 @@ document.querySelector("#search").addEventListener("click", function () {
       let current_feels_like = Math.ceil(
         Number(weatherData["current"]["feels_like"])
       );
-      let current_weather = weatherData["current"]["weather"][0]["main"];
+      let current_weather = weatherData["current"]["weather"][0]["description"];
+      let icon = document.createElement("i");
 
       document.getElementById("current_weather").innerHTML = current_weather;
       document.getElementById("current_temp").innerHTML = current_temp;
       document.getElementById("feels_like").innerHTML = current_feels_like;
+
+      let iconType = "";
+      let current_weather_id = weatherData["current"]["weather"][0]["id"];
+      document.getElementById("weather_icon").innerHTML = "";
+      iconType = `wi-${wiToOWM[current_weather_id]}`;
+
+      icon.classList.add("wi", iconType);
+      document.getElementById("weather_icon").append(icon);
+      console.log(icon);
 
       //12 Hour Forecast
       let forecast_table = document.getElementById("hour_forecast");
       forecast_table.innerHTML = "";
 
       for (let i = 0; i < 12; i++) {
-        let forecast_div = document.createElement("div");
-        forecast_div.className = `hour_${i}`;
+        let forecast_row = document.createElement("tr");
+        forecast_row.className = `hour_${i}`;
 
         let forecast_time = document.createElement("td");
         let forecast_temp = document.createElement("td");
@@ -318,19 +328,18 @@ document.querySelector("#search").addEventListener("click", function () {
           weatherData["hourly"][i]["temp"]
         )}&#176C`;
         forecast_weather.innerHTML =
-          weatherData["hourly"][i]["weather"][0]["main"];
+          weatherData["hourly"][i]["weather"][0]["description"];
 
         let iconType = "";
         let hourly_weather_id = weatherData["hourly"][i]["weather"][0]["id"];
-        console.log(hourly_weather_id);
-        console.log(wiToOWM[hourly_weather_id]);
+
         iconType = `wi-${wiToOWM[hourly_weather_id]}`;
 
         icon.classList.add("wi", iconType);
         forecast_weather.append(icon);
 
-        forecast_div.append(forecast_time, forecast_weather, forecast_temp);
-        forecast_table.appendChild(forecast_div);
+        forecast_row.append(forecast_time, forecast_weather, forecast_temp);
+        forecast_table.appendChild(forecast_row);
       }
 
       //Easy way to add toggle to 7-day forecast would be to add the toggle button to the getLocationWeather() function.
@@ -339,8 +348,8 @@ document.querySelector("#search").addEventListener("click", function () {
       day_forecast.innerHTML = "";
 
       for (let i = 1; i < weatherData["daily"].length; i++) {
-        let day_forecast_div = document.createElement("div");
-        day_forecast_div.className = `day_${i}`;
+        let day_forecast_row = document.createElement("row");
+        day_forecast_row.className = `day_${i}`;
 
         let day_forecast_date = document.createElement("td");
         let day_forecast_temp = document.createElement("td");
@@ -364,7 +373,7 @@ document.querySelector("#search").addEventListener("click", function () {
           weatherData["daily"][i]["temp"]["max"]
         )}&#176C`;
         day_forecast_weather.innerHTML =
-          weatherData["daily"][i]["weather"][0]["main"];
+          weatherData["daily"][i]["weather"][0]["description"];
 
         let iconType = "";
         let daily_weather_id = weatherData["daily"][i]["weather"][0]["id"];
@@ -373,12 +382,12 @@ document.querySelector("#search").addEventListener("click", function () {
         icon.classList.add("wi", iconType);
         day_forecast_weather.append(icon);
 
-        day_forecast_div.append(
+        day_forecast_row.append(
           day_forecast_date,
           day_forecast_weather,
           day_forecast_temp
         );
-        day_forecast.appendChild(day_forecast_div);
+        day_forecast.appendChild(day_forecast_row);
       }
 
       document.getElementById("day_forecast").classList.add("hidden");
