@@ -4,3 +4,11 @@ table {
 td {
   border: 1px black solid;
 }
+
+#seven_day {
+  display: inline;
+}
+
+.hidden {
+  visibility: collapse;
+}
