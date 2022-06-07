@@ -183,6 +183,24 @@ const wiToOWM = {
   "night-957": "strong-wind",
 };
 
+function toggleButton(toggle_button) {
+  console.log(this);
+  let forecast_table = document.getElementById("hour_forecast");
+  if (this.innerText === "7-Day Forecast") {
+    this.innerText = "12-Hour Forecast";
+    document.getElementById("query_type").innerText = "7-Day Forecast";
+    day_forecast.classList.remove("hidden");
+    forecast_table.classList.add("hidden");
+    console.log("7Day");
+  } else if (this.innerText === "12-Hour Forecast") {
+    forecast_table.classList.remove("hidden");
+    day_forecast.classList.add("hidden");
+    document.getElementById("query_type").innerText = "12-Hour Forecast";
+    this.innerText = "7-Day Forecast";
+    console.log("12hour");
+  }
+}
+
 /*
 const getDayNight = (sunrise, sunset) => {
       const now = Date.now();
@@ -367,23 +385,11 @@ document.querySelector("#search").addEventListener("click", function () {
 
       console.log(weatherData);
       //Adding event listener to button to toggle
-      const toggle_button = document.getElementById("toggle_hour_day");
+      const tog_button = document.getElementById("toggle_hour_day");
 
-      toggle_button.addEventListener("click", function () {
-        if (toggle_button.innerText === "7-Day Forecast") {
-          toggle_button.innerText = "12-Hour Forecast";
-          document.getElementById("query_type").innerText = "7-Day Forecast";
-          day_forecast.classList.remove("hidden");
-          forecast_table.classList.add("hidden");
-          console.log("7Day");
-        } else if (toggle_button.innerText === "12-Hour Forecast") {
-          forecast_table.classList.remove("hidden");
-          day_forecast.classList.add("hidden");
-          document.getElementById("query_type").innerText = "12-Hour Forecast";
-          toggle_button.innerText = "7-Day Forecast";
-          console.log("12hour");
-        }
-      });
+      tog_button.removeEventListener("click", toggleButton);
+      //Removes any event listener if there were any previously before adding.
+      tog_button.addEventListener("click", toggleButton);
     } catch (err) {
       alert(err);
     }
