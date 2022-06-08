@@ -1,6 +1,8 @@
 "use strict";
-//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
+const ip_api =
+  "https://ipgeolocation.abstractapi.com/v1/?api_key=19716e399e41408c897fc4b541160cf8";
 
+//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
 const api_key = "0d32655573f280eaa5d85c7e6fa638a5";
 //Mapping taken from https://github.com/erikflowers/weather-icons/issues/204
 const wiToOWM = {
@@ -193,7 +195,8 @@ function toggleButton(toggle_button) {
   } else if (this.innerText === "12-Hour Forecast") {
     forecast_table.classList.remove("hidden");
     day_forecast.classList.add("hidden");
-    document.getElementById("query_type").innerText = "12-Hour Forecast";
+    document.getElementById("query_type").innerText =
+      "12-Hour Forecast (Local Time)";
     this.innerText = "7-Day Forecast";
   } else {
     this.innerText = "12-Hour Forecast";
@@ -231,20 +234,49 @@ if (morning.includes(timeNow)) {
   document.querySelector("h1").innerHTML = "Good Evening!";
 }
 
-//Getting user location
-// let user_location = document.querySelector("#user_current_location");
-// function geoLocation() {
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(showPosition);
-//   } else {
-//     alert("Geolocation is not supported, please enable location services!");
-//   }
-// }
+// Pinging user location from IP
+// Fetch data from the api first, which returns a response. Response then needs to be parsed into json with .json() method
 
-// function showPosition(position) {
-//   user_location.innerHTML = `Latitude: ${position.coords.latitude} \nLongitude: ${position.coords.longitude}`;
-// }
+async function getUserIP() {
+  try {
+    await fetch(ip_api)
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        const data = json;
 
+        const userLocation = document.getElementById("geolocation");
+        userLocation.innerHTML = `${data.city}, ${data.country}`;
+        // If returns undefined, check error code. Probably error code 429 which represents that the API has rate limited user request
+
+        //Add clock
+        const clockTable = document.createElement("table");
+        const dateRow = document.createElement("tr");
+        const timeRow = document.createElement("tr");
+
+        clockTable.append(dateRow);
+        clockTable.append(timeRow);
+        userLocation.append(clockTable);
+
+        setInterval(myClock, 1000);
+
+        function myClock() {
+          let timeNow = new Date();
+
+          timeNow.toISOString().split("T")[0];
+
+          let hours = timeNow.getHours();
+          let min = timeNow.getMinutes();
+          let second = timeNow.getSeconds();
+          timeRow.innerHTML = `${hours}:${min}:${second}, GMT ${data["timezone"]["abbreviation"]}`;
+        }
+      });
+  } catch {
+    console.log("An error occurred");
+  }
+}
+
+getUserIP();
 /*
 Current forecast - https://openweathermap.org/api/one-call-api
 5 day forecast - https://openweathermap.org/forecast5
@@ -263,6 +295,7 @@ document.querySelector("#search").addEventListener("click", function () {
     Country code to use ISO3166. Disabled for now and limited to 1 search term */
 
       const res = await fetch(searchLocation);
+
       const locationData = await res.json();
       //response = wait for fetch data from url
       // location data = parse the data in json format
@@ -271,14 +304,19 @@ document.querySelector("#search").addEventListener("click", function () {
       let lon = locationData[0].lon;
       //Get lat and lon from user input
 
-      document.getElementById("search_location").innerHTML =
-        locationData[0]["name"] + ", " + locationData[0]["country"];
-
       const currentWeatherURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${api_key}&units=metric`;
       const weatherRes = await fetch(currentWeatherURL);
       const weatherData = await weatherRes.json();
 
       console.log(currentWeatherURL);
+      let gmtZone = weatherData["timezone_offset"] / 3600;
+
+      document.getElementById("search_location").innerHTML = `${
+        locationData[0]["name"]
+      }, ${locationData[0]["country"]}, GMT ${
+        gmtZone > 0 ? `+${gmtZone}` : gmtZone
+      }`;
+      // Just trying, ternary operator. If gmtZone is more than 0, add a + sign in front. Otherwise negative numbers will show negative sign anyway
 
       //Current weather data
       let current_temp = Math.ceil(Number(weatherData.current.temp));
@@ -318,11 +356,13 @@ document.querySelector("#search").addEventListener("click", function () {
         let icon = document.createElement("i");
 
         // Time is stored as Unix
-        let weatherTime = weatherData["hourly"][i]["dt"];
+        let weatherTime =
+          weatherData["hourly"][i]["dt"] + weatherData["timezone_offset"];
         //Convert from Unix by inputting milliseconds into new Date() method. Convert by multiplying by 1000
         weatherTime = weatherTime * 1000;
         weatherTime = new Date(weatherTime);
-        weatherTime = weatherTime.toLocaleTimeString([], {
+        weatherTime = weatherTime.toLocaleString([], {
+          timeZone: "UTC",
           month: "long",
           day: "2-digit",
           hour: "numeric",
@@ -366,7 +406,7 @@ document.querySelector("#search").addEventListener("click", function () {
         //Convert from Unix by inputting milliseconds into new Date() method. Convert by multiplying by 1000
         weatherTime = weatherTime * 1000;
         weatherTime = new Date(weatherTime);
-        weatherTime = weatherTime.toLocaleDateString([], {
+        weatherTime = weatherTime.toLocaleString([], {
           day: "numeric",
           month: "long",
         });
@@ -399,10 +439,16 @@ document.querySelector("#search").addEventListener("click", function () {
       const tog_button = document.getElementById("toggle_hour_day");
 
       //Making it default such that every new search will display 12h forecast
-      document.getElementById("query_type").innerText = "12-Hour Forecast";
+      document.getElementById("query_type").innerText =
+        "12-Hour Forecast (Local Time)";
       day_forecast.classList.add("hidden");
       forecast_table.classList.remove("hidden");
       tog_button.innerText = "Toggle Forecast";
+
+      //Enable button
+      tog_button.removeAttribute("disabled");
+      tog_button.classList.remove("btn-outline-secondary");
+      tog_button.classList.add("btn-outline-primary");
 
       tog_button.removeEventListener("click", toggleButton);
       //Removes any event listener if there were any previously before adding.
@@ -414,3 +460,37 @@ document.querySelector("#search").addEventListener("click", function () {
   }
   getLocationWeather();
 });
+
+// Not useful to use geolocation to get user location if only interested in getting country, seems like pinging it from IP is sufficient
+// let userCoords = {};
+// function successGeolocation(pos) {
+//   let coords = pos.coords;
+//   //coords is an object that is passed back by the getCurrentPosition method
+
+//   userCoords["latitude"] = coords["latitude"];
+//   userCoords["longitude"] = coords["longitude"];
+//   console.log(userCoords);
+//   console.log(coords);
+//   return userCoords;
+// }
+
+// function errorLocation() {
+//   alert("Please allow access to location functions!");
+//   document.querySelector("#geolocation").innerText =
+//     "Location function not active ";
+// }
+// navigator.geolocation.getCurrentPosition(successGeolocation, errorLocation);
+
+// //Getting user location
+// // let user_location = document.querySelector("#user_current_location");
+// // function geoLocation() {
+// //   if (navigator.geolocation) {
+// //     navigator.geolocation.getCurrentPosition(showPosition);
+// //   } else {
+// //     alert("Geolocation is not supported, please enable location services!");
+// //   }
+// // }
+
+// // function showPosition(position) {
+// //   user_location.innerHTML = `Latitude: ${position.coords.latitude} \nLongitude: ${position.coords.longitude}`;
+// // }

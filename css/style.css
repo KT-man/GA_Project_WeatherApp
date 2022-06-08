@@ -1,5 +1,5 @@
 body {
-  background-color: red;
+  background-color: darkseagreen;
 }
 
 .container {
@@ -25,13 +25,16 @@ body {
   margin: 30px;
   /*Weird behavior with Margin, if margin is too small, the table rows don't display on individual rows*/
 }
-
 table {
   border-collapse: separate;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   width: 100%;
+}
+
+td {
+  text-align: right;
 }
 
 #seven_day {
