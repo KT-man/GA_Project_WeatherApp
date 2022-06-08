@@ -1,7 +1,5 @@
 body {
-  background-image: url("../images/clear/clear_1.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: darkseagreen;
 }
 
 .container {
@@ -47,4 +45,10 @@ table {
 .wi {
   font-size: 2.5em;
   display: inline-block;
+}
+
+#geolocation {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

@@ -184,20 +184,22 @@ const wiToOWM = {
 };
 
 function toggleButton(toggle_button) {
-  console.log(this);
   let forecast_table = document.getElementById("hour_forecast");
   if (this.innerText === "7-Day Forecast") {
     this.innerText = "12-Hour Forecast";
     document.getElementById("query_type").innerText = "7-Day Forecast";
     day_forecast.classList.remove("hidden");
     forecast_table.classList.add("hidden");
-    console.log("7Day");
   } else if (this.innerText === "12-Hour Forecast") {
     forecast_table.classList.remove("hidden");
     day_forecast.classList.add("hidden");
     document.getElementById("query_type").innerText = "12-Hour Forecast";
     this.innerText = "7-Day Forecast";
-    console.log("12hour");
+  } else {
+    this.innerText = "12-Hour Forecast";
+    document.getElementById("query_type").innerText = "7-Day Forecast";
+    day_forecast.classList.remove("hidden");
+    forecast_table.classList.add("hidden");
   }
 }
 
@@ -277,6 +279,7 @@ document.querySelector("#search").addEventListener("click", function () {
       const weatherData = await weatherRes.json();
 
       console.log(currentWeatherURL);
+
       //Current weather data
       let current_temp = Math.ceil(Number(weatherData.current.temp));
       let current_feels_like = Math.ceil(
@@ -286,8 +289,12 @@ document.querySelector("#search").addEventListener("click", function () {
       let icon = document.createElement("i");
 
       document.getElementById("current_weather").innerHTML = current_weather;
-      document.getElementById("current_temp").innerHTML = current_temp;
-      document.getElementById("feels_like").innerHTML = current_feels_like;
+      document.getElementById(
+        "current_temp"
+      ).innerHTML = `Current Temperature: ${current_temp}&#176C`;
+      document.getElementById(
+        "feels_like"
+      ).innerHTML = `Feels Like: ${current_feels_like}&#176C`;
 
       let iconType = "";
       let current_weather_id = weatherData["current"]["weather"][0]["id"];
@@ -296,7 +303,6 @@ document.querySelector("#search").addEventListener("click", function () {
 
       icon.classList.add("wi", iconType);
       document.getElementById("weather_icon").append(icon);
-      console.log(icon);
 
       //12 Hour Forecast
       let forecast_table = document.getElementById("hour_forecast");
@@ -342,13 +348,12 @@ document.querySelector("#search").addEventListener("click", function () {
         forecast_table.appendChild(forecast_row);
       }
 
-      //Easy way to add toggle to 7-day forecast would be to add the toggle button to the getLocationWeather() function.
-      //Toggle button only appears after user has searched
+      // 7 Day Forecast
       let day_forecast = document.getElementById("day_forecast");
       day_forecast.innerHTML = "";
 
       for (let i = 1; i < weatherData["daily"].length; i++) {
-        let day_forecast_row = document.createElement("row");
+        let day_forecast_row = document.createElement("tr");
         day_forecast_row.className = `day_${i}`;
 
         let day_forecast_date = document.createElement("td");
@@ -390,17 +395,21 @@ document.querySelector("#search").addEventListener("click", function () {
         day_forecast.appendChild(day_forecast_row);
       }
 
-      document.getElementById("day_forecast").classList.add("hidden");
-
-      console.log(weatherData);
       //Adding event listener to button to toggle
       const tog_button = document.getElementById("toggle_hour_day");
+
+      //Making it default such that every new search will display 12h forecast
+      document.getElementById("query_type").innerText = "12-Hour Forecast";
+      day_forecast.classList.add("hidden");
+      forecast_table.classList.remove("hidden");
+      tog_button.innerText = "Toggle Forecast";
 
       tog_button.removeEventListener("click", toggleButton);
       //Removes any event listener if there were any previously before adding.
       tog_button.addEventListener("click", toggleButton);
     } catch (err) {
-      alert(err);
+      console.log(err);
+      alert("Please ensure your search term is for a City!");
     }
   }
   getLocationWeather();
