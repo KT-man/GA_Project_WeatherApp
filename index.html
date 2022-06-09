@@ -21,6 +21,7 @@
     <link href="css/style.css" rel="stylesheet" />
   </head>
   <body>
+
     <section class="bg">
       <img src="images/rain/rain_1.jpg" />
       <div class="container">
@@ -67,6 +68,42 @@
               Please search for a city!
             </button>
           </div>
+
+    <div class="container">
+      <h1>Good Morning!</h1>
+      <div id="geolocation">User Current Location</div>
+      <div class="main_weather">
+        <h2 id="search_location">Please enter your search below</h2>
+        <input
+          id="query"
+          name="q"
+          type="search"
+          size="30"
+          placeholder="Location Name"
+          required
+        />
+        <button id="search">Search</button>
+        <br />
+        <div id="current_div">
+          <h3>Current Weather</h3>
+          <table class="table table-borderless">
+            <tr>
+              <td id="current_weather">Current Weather</td>
+              <td id="weather_icon"></td>
+            </tr>
+            <tr>
+              <td id="current_temp">Temperature</td>
+              <td id="feels_like">Feels Like</td>
+            </tr>
+          </table>
+        </div>
+        <br />
+        <div id="forecast_div">
+          <h3 id="query_type">12 Hour Forecast</h3>
+          <table id="hour_forecast" class="table table-borderless"></table>
+          <table id="day_forecast" class="table table-borderless"></table>
+          <button id="toggle_hour_day">Please search for a city</button>
+
         </div>
       </div>
     </section>
