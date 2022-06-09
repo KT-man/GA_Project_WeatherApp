@@ -192,7 +192,7 @@ document.querySelector("#search").addEventListener("click", function () {
   // Current weather forecast
   async function getLocationWeather() {
     try {
-      const searchLocation = `http://api.openweathermap.org/geo/1.0/direct?q=${city_name}&limit=1&appid=${api_key}`;
+      const searchLocation = `https://api.openweathermap.org/geo/1.0/direct?q=${city_name}&limit=1&appid=${api_key}`;
       /*http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
     State code only for US. 
     Country code to use ISO3166. Disabled for now and limited to 1 search term */
