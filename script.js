@@ -1,9 +1,12 @@
 const ip_api =
   "https://ipgeolocation.abstractapi.com/v1/?api_key=19716e399e41408c897fc4b541160cf8";
+//API documentation for abstract IP geolocation - https://app.abstractapi.com/api/ip-geolocation/tester
 
-//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
 const api_key = "0d32655573f280eaa5d85c7e6fa638a5";
+//API documentation for openweathermap https://openweathermap.org/api/one-call-api
+
 //Mapping taken from https://github.com/erikflowers/weather-icons/issues/204
+//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
 const wiToOWM = {
   200: "thunderstorm",
   201: "thunderstorm",
@@ -68,22 +71,25 @@ const wiToOWM = {
   957: "strong-wind",
 };
 
+//Button toggle function for switching between forecasts
+let query_header = document.getElementById("query_header");
+let forecast_table = document.getElementById("hourly_forecast");
+let day_forecast = document.getElementById("daily_forecast");
+
 function toggleButton(toggle_button) {
-  let forecast_table = document.getElementById("hour_forecast");
   if (this.innerText === "7-Day Forecast") {
     this.innerText = "12-Hour Forecast";
-    document.getElementById("query_type").innerText = "7-Day Forecast";
+    query_header.innerText = "7-Day Forecast";
     day_forecast.classList.remove("hidden");
     forecast_table.classList.add("hidden");
   } else if (this.innerText === "12-Hour Forecast") {
     forecast_table.classList.remove("hidden");
     day_forecast.classList.add("hidden");
-    document.getElementById("query_type").innerText =
-      "12-Hour Forecast (Local Time)";
+    query_header.innerText = "12-Hour Forecast (Local Time)";
     this.innerText = "7-Day Forecast";
   } else {
     this.innerText = "12-Hour Forecast";
-    document.getElementById("query_type").innerText = "7-Day Forecast";
+    query_header.innerText = "7-Day Forecast";
     day_forecast.classList.remove("hidden");
     forecast_table.classList.add("hidden");
   }
@@ -101,48 +107,20 @@ function scale(number, loadMin, loadMax, opacityMin, opacityMax) {
 
 let load = 0;
 let initialize = setInterval(blurring, 15);
+let loadingText = document.querySelector(".loading-text");
+let bg = document.querySelector(".bg");
 
 function blurring() {
   load++;
-  document.querySelector(".loading-text").innerText = `${load}%`;
-  document.querySelector(".loading-text").style.opacity = scale(
-    load,
-    0,
-    100,
-    1,
-    0
-  );
-  document.querySelector(".bg").style.filter = `blur(${scale(
-    load,
-    0,
-    100,
-    30,
-    0
-  )}px)`;
+  loadingText.innerText = `${load}%`;
+  loadingText.style.opacity = scale(load, 0, 100, 1, 0);
+  bg.style.filter = `blur(${scale(load, 0, 100, 30, 0)}px)`;
 
   if (load > 99) {
     clearInterval(initialize);
-    document
-      .querySelector(".bg")
-      .replaceWith(...document.querySelector(".bg").childNodes);
+    bg.replaceWith(...document.querySelector(".bg").childNodes);
+    loadingText.remove();
   }
-}
-
-//Setting Greeting
-// To add in Timezone and changing to local time
-let timeNow = new Date();
-timeNow = timeNow.getHours();
-
-const morning = [4, 5, 6, 7, 8, 9, 10, 11];
-const afternoon = [12, 13, 14, 15, 16, 17, 18, 19];
-const evening = [20, 21, 22, 23, 0, 1, 2, 3];
-
-if (morning.includes(timeNow)) {
-  document.querySelector("h1").innerHTML = "Good Morning!";
-} else if (afternoon.includes(timeNow)) {
-  document.querySelector("h1").innerHTML = "Good Afternoon!";
-} else {
-  document.querySelector("h1").innerHTML = "Good Evening!";
 }
 
 // Pinging user location from IP
@@ -153,12 +131,16 @@ async function getUserIP() {
     await fetch(ip_api)
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         const data = json;
 
         const userLocation = document.getElementById("geolocation");
         userLocation.innerHTML = `${data.city}, ${data.country}`;
         // If returns undefined, check error code. Probably error code 429 which represents that the API has rate limited user request
+
+        //Setting constants for greeting message later
+        const morning = [4, 5, 6, 7, 8, 9, 10, 11];
+        const afternoon = [12, 13, 14, 15, 16, 17, 18, 19];
+        const evening = [20, 21, 22, 23, 0, 1, 2, 3];
 
         //Add clock. Needs to be with userlocation as it uses api data
         const clockTable = document.createElement("table");
@@ -173,6 +155,7 @@ async function getUserIP() {
 
         function myClock() {
           let timeNow = new Date();
+          // Cannot just reuse timeNow previously declared because need to keep updating time
 
           timeNow.toISOString().split("T")[0];
 
@@ -183,6 +166,15 @@ async function getUserIP() {
           let second = timeNow.getSeconds();
           second = second < 10 ? `0${second}` : second;
           timeRow.innerHTML = `${hours}:${min}:${second}, GMT ${data["timezone"]["abbreviation"]}`;
+
+          // Setting greeting. Benefit of putting this here is that it will change from afternoon -> evening if timing changes
+          if (morning.includes(hours)) {
+            document.querySelector("h1").innerHTML = "Good Morning!";
+          } else if (afternoon.includes(hours)) {
+            document.querySelector("h1").innerHTML = "Good Afternoon!";
+          } else {
+            document.querySelector("h1").innerHTML = "Good Evening!";
+          }
         }
       });
   } catch (err) {
@@ -192,10 +184,6 @@ async function getUserIP() {
 }
 
 getUserIP();
-/*
-Current forecast - https://openweathermap.org/api/one-call-api
-5 day forecast - https://openweathermap.org/forecast5
-*/
 
 //Retrieve data from API
 document.querySelector("#search").addEventListener("click", function () {
@@ -258,7 +246,6 @@ document.querySelector("#search").addEventListener("click", function () {
       document.getElementById("weather_icon").append(icon);
 
       //12 Hour Forecast
-      let forecast_table = document.getElementById("hour_forecast");
       forecast_table.innerHTML = "";
 
       let forecast_body = document.createElement("tbody");
@@ -306,7 +293,6 @@ document.querySelector("#search").addEventListener("click", function () {
       forecast_table.appendChild(forecast_body);
 
       // 7 Day Forecast
-      let day_forecast = document.getElementById("day_forecast");
       day_forecast.innerHTML = "";
 
       let day_forecast_body = document.createElement("tbody");
@@ -358,20 +344,27 @@ document.querySelector("#search").addEventListener("click", function () {
       const tog_button = document.getElementById("toggle_hour_day");
 
       //Making it default such that every new search will display 12h forecast
-      document.getElementById("query_type").innerText =
-        "12-Hour Forecast (Local Time)";
+      query_header.innerText = "12-Hour Forecast (Local Time)";
       day_forecast.classList.add("hidden");
       forecast_table.classList.remove("hidden");
       tog_button.innerText = "Toggle Forecast";
 
       //Enable button
       tog_button.removeAttribute("disabled");
-      tog_button.classList.remove("btn-outline-secondary");
-      tog_button.classList.add("btn-outline-primary");
+      tog_button.classList.remove("btn-secondary");
+      tog_button.classList.add("btn-primary");
 
-      tog_button.removeEventListener("click", toggleButton);
       //Removes any event listener if there were any previously before adding.
+      tog_button.removeEventListener("click", toggleButton);
       tog_button.addEventListener("click", toggleButton);
+
+      // ---------SPACE-----------
+      //Add favorites button
+      //Commit the current search value (key) and api data(value) into localstorage.
+      //Append to a sidebar list "favorites" for anchor link
+      //Anchor tags should then redirect back to the search data
+
+      //Adding event listener to favorites button and adding favorites list
     } catch (err) {
       console.log(err);
       alert("Please ensure your search term is for a City!");
@@ -381,3 +374,7 @@ document.querySelector("#search").addEventListener("click", function () {
 });
 
 // Not useful to use geolocation to get user location if only interested in getting country, seems like pinging it from IP is sufficient
+
+function setFavorite() {
+  localStorage.setItem(city_name, weatherData);
+}
