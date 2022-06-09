@@ -1,8 +1,12 @@
-"use strict";
-//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
+const ip_api =
+  "https://ipgeolocation.abstractapi.com/v1/?api_key=19716e399e41408c897fc4b541160cf8";
+//API documentation for abstract IP geolocation - https://app.abstractapi.com/api/ip-geolocation/tester
 
 const api_key = "0d32655573f280eaa5d85c7e6fa638a5";
+//API documentation for openweathermap https://openweathermap.org/api/one-call-api
+
 //Mapping taken from https://github.com/erikflowers/weather-icons/issues/204
+//https://github.com/erikflowers/weather-icons/issues/250 NOT AN ISSUE
 const wiToOWM = {
   200: "thunderstorm",
   201: "thunderstorm",
@@ -65,190 +69,121 @@ const wiToOWM = {
   905: "windy",
   906: "hail",
   957: "strong-wind",
-  "day-200": "day-thunderstorm",
-  "day-201": "day-thunderstorm",
-  "day-202": "day-thunderstorm",
-  "day-210": "day-lightning",
-  "day-211": "day-lightning",
-  "day-212": "day-lightning",
-  "day-221": "day-lightning",
-  "day-230": "day-thunderstorm",
-  "day-231": "day-thunderstorm",
-  "day-232": "day-thunderstorm",
-  "day-300": "day-sprinkle",
-  "day-301": "day-sprinkle",
-  "day-302": "day-rain",
-  "day-310": "day-rain",
-  "day-311": "day-rain",
-  "day-312": "day-rain",
-  "day-313": "day-rain",
-  "day-314": "day-rain",
-  "day-321": "day-sprinkle",
-  "day-500": "day-sprinkle",
-  "day-501": "day-rain",
-  "day-502": "day-rain",
-  "day-503": "day-rain",
-  "day-504": "day-rain",
-  "day-511": "day-rain-mix",
-  "day-520": "day-showers",
-  "day-521": "day-showers",
-  "day-522": "day-showers",
-  "day-531": "day-storm-showers",
-  "day-600": "day-snow",
-  "day-601": "day-sleet",
-  "day-602": "day-snow",
-  "day-611": "day-rain-mix",
-  "day-612": "day-rain-mix",
-  "day-615": "day-rain-mix",
-  "day-616": "day-rain-mix",
-  "day-620": "day-rain-mix",
-  "day-621": "day-snow",
-  "day-622": "day-snow",
-  "day-701": "day-showers",
-  "day-711": "smoke",
-  "day-721": "day-haze",
-  "day-731": "dust",
-  "day-741": "day-fog",
-  "day-761": "dust",
-  "day-762": "dust",
-  "day-781": "tornado",
-  "day-800": "day-sunny",
-  "day-801": "day-cloudy-gusts",
-  "day-802": "day-cloudy-gusts",
-  "day-803": "day-cloudy-gusts",
-  "day-804": "day-sunny-overcast",
-  "day-900": "tornado",
-  "day-902": "hurricane",
-  "day-903": "snowflake-cold",
-  "day-904": "hot",
-  "day-906": "day-hail",
-  "day-957": "strong-wind",
-  "night-200": "night-alt-thunderstorm",
-  "night-201": "night-alt-thunderstorm",
-  "night-202": "night-alt-thunderstorm",
-  "night-210": "night-alt-lightning",
-  "night-211": "night-alt-lightning",
-  "night-212": "night-alt-lightning",
-  "night-221": "night-alt-lightning",
-  "night-230": "night-alt-thunderstorm",
-  "night-231": "night-alt-thunderstorm",
-  "night-232": "night-alt-thunderstorm",
-  "night-300": "night-alt-sprinkle",
-  "night-301": "night-alt-sprinkle",
-  "night-302": "night-alt-rain",
-  "night-310": "night-alt-rain",
-  "night-311": "night-alt-rain",
-  "night-312": "night-alt-rain",
-  "night-313": "night-alt-rain",
-  "night-314": "night-alt-rain",
-  "night-321": "night-alt-sprinkle",
-  "night-500": "night-alt-sprinkle",
-  "night-501": "night-alt-rain",
-  "night-502": "night-alt-rain",
-  "night-503": "night-alt-rain",
-  "night-504": "night-alt-rain",
-  "night-511": "night-alt-rain-mix",
-  "night-520": "night-alt-showers",
-  "night-521": "night-alt-showers",
-  "night-522": "night-alt-showers",
-  "night-531": "night-alt-storm-showers",
-  "night-600": "night-alt-snow",
-  "night-601": "night-alt-sleet",
-  "night-602": "night-alt-snow",
-  "night-611": "night-alt-rain-mix",
-  "night-612": "night-alt-rain-mix",
-  "night-615": "night-alt-rain-mix",
-  "night-616": "night-alt-rain-mix",
-  "night-620": "night-alt-rain-mix",
-  "night-621": "night-alt-snow",
-  "night-622": "night-alt-snow",
-  "night-701": "night-alt-showers",
-  "night-711": "smoke",
-  "night-721": "day-haze",
-  "night-731": "dust",
-  "night-741": "night-fog",
-  "night-761": "dust",
-  "night-762": "dust",
-  "night-781": "tornado",
-  "night-800": "night-clear",
-  "night-801": "night-alt-cloudy-gusts",
-  "night-802": "night-alt-cloudy-gusts",
-  "night-803": "night-alt-cloudy-gusts",
-  "night-804": "night-alt-cloudy",
-  "night-900": "tornado",
-  "night-902": "hurricane",
-  "night-903": "snowflake-cold",
-  "night-904": "hot",
-  "night-906": "night-alt-hail",
-  "night-957": "strong-wind",
 };
 
+//Button toggle function for switching between forecasts
+let query_header = document.getElementById("query_header");
+let forecast_table = document.getElementById("hourly_forecast");
+let day_forecast = document.getElementById("daily_forecast");
+
 function toggleButton(toggle_button) {
-  let forecast_table = document.getElementById("hour_forecast");
   if (this.innerText === "7-Day Forecast") {
     this.innerText = "12-Hour Forecast";
-    document.getElementById("query_type").innerText = "7-Day Forecast";
+    query_header.innerText = "7-Day Forecast";
     day_forecast.classList.remove("hidden");
     forecast_table.classList.add("hidden");
   } else if (this.innerText === "12-Hour Forecast") {
     forecast_table.classList.remove("hidden");
     day_forecast.classList.add("hidden");
-    document.getElementById("query_type").innerText = "12-Hour Forecast";
+    query_header.innerText = "12-Hour Forecast (Local Time)";
     this.innerText = "7-Day Forecast";
   } else {
     this.innerText = "12-Hour Forecast";
-    document.getElementById("query_type").innerText = "7-Day Forecast";
+    query_header.innerText = "7-Day Forecast";
     day_forecast.classList.remove("hidden");
     forecast_table.classList.add("hidden");
   }
 }
 
-/*
-const getDayNight = (sunrise, sunset) => {
-      const now = Date.now();
-      if (now> sunrise && now< sunset) {
-        return "day-";
-      } else {
-        return "night-";
-      }
-    };
-*/
-
-//Setting Greeting
-// To add in Timezone and changing to local time
-let timeNow = new Date();
-timeNow = timeNow.getHours();
-
-const morning = [4, 5, 6, 7, 8, 9, 10, 11];
-const afternoon = [12, 13, 14, 15, 16, 17, 18, 19];
-const evening = [20, 21, 22, 23, 0, 1, 2, 3];
-
-if (morning.includes(timeNow)) {
-  document.querySelector("h1").innerHTML = "Good Morning!";
-} else if (afternoon.includes(timeNow)) {
-  document.querySelector("h1").innerHTML = "Good Afternoon!";
-} else {
-  document.querySelector("h1").innerHTML = "Good Evening!";
+//Loading animation
+//Function taken from https://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers
+// Don't really get the math but it works, basically will have to pass in a number, "number", with the first range of numbers (0 - 100) and another range of numbers (1 - 0 for opacity )
+function scale(number, loadMin, loadMax, opacityMin, opacityMax) {
+  return (
+    ((number - loadMin) * (opacityMax - opacityMin)) / (loadMax - loadMin) +
+    opacityMin
+  );
 }
 
-//Getting user location
-// let user_location = document.querySelector("#user_current_location");
-// function geoLocation() {
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(showPosition);
-//   } else {
-//     alert("Geolocation is not supported, please enable location services!");
-//   }
-// }
+let load = 0;
+let initialize = setInterval(blurring, 15);
+let loadingText = document.querySelector(".loading-text");
+let bg = document.querySelector(".bg");
 
-// function showPosition(position) {
-//   user_location.innerHTML = `Latitude: ${position.coords.latitude} \nLongitude: ${position.coords.longitude}`;
-// }
+function blurring() {
+  load++;
+  loadingText.innerText = `${load}%`;
+  loadingText.style.opacity = scale(load, 0, 100, 1, 0);
+  bg.style.filter = `blur(${scale(load, 0, 100, 30, 0)}px)`;
 
-/*
-Current forecast - https://openweathermap.org/api/one-call-api
-5 day forecast - https://openweathermap.org/forecast5
-*/
+  if (load > 99) {
+    clearInterval(initialize);
+    bg.replaceWith(...document.querySelector(".bg").childNodes);
+    loadingText.remove();
+  }
+}
+
+// Pinging user location from IP
+// Fetch data from the api first, which returns a response. Response then needs to be parsed into json with .json() method
+
+async function getUserIP() {
+  try {
+    await fetch(ip_api)
+      .then((response) => response.json())
+      .then((json) => {
+        const data = json;
+
+        const userLocation = document.getElementById("geolocation");
+        userLocation.innerHTML = `${data.city}, ${data.country}`;
+        // If returns undefined, check error code. Probably error code 429 which represents that the API has rate limited user request
+
+        //Setting constants for greeting message later
+        const morning = [4, 5, 6, 7, 8, 9, 10, 11];
+        const afternoon = [12, 13, 14, 15, 16, 17, 18, 19];
+        const evening = [20, 21, 22, 23, 0, 1, 2, 3];
+
+        //Add clock. Needs to be with userlocation as it uses api data
+        const clockTable = document.createElement("table");
+        const dateRow = document.createElement("tr");
+        const timeRow = document.createElement("tr");
+
+        clockTable.append(dateRow);
+        clockTable.append(timeRow);
+        userLocation.append(clockTable);
+
+        setInterval(myClock, 1000);
+
+        function myClock() {
+          let timeNow = new Date();
+          // Cannot just reuse timeNow previously declared because need to keep updating time
+
+          timeNow.toISOString().split("T")[0];
+
+          let hours = timeNow.getHours();
+          hours = hours < 10 ? `0${hours}` : hours;
+          let min = timeNow.getMinutes();
+          min = min < 10 ? `0${min}` : min;
+          let second = timeNow.getSeconds();
+          second = second < 10 ? `0${second}` : second;
+          timeRow.innerHTML = `${hours}:${min}:${second}, GMT ${data["timezone"]["abbreviation"]}`;
+
+          // Setting greeting. Benefit of putting this here is that it will change from afternoon -> evening if timing changes
+          if (morning.includes(hours)) {
+            document.querySelector("h1").innerHTML = "Good Morning!";
+          } else if (afternoon.includes(hours)) {
+            document.querySelector("h1").innerHTML = "Good Afternoon!";
+          } else {
+            document.querySelector("h1").innerHTML = "Good Evening!";
+          }
+        }
+      });
+  } catch (err) {
+    console.log(err);
+    alert("You're going too fast! Slow down and refresh");
+  }
+}
+
+getUserIP();
 
 //Retrieve data from API
 document.querySelector("#search").addEventListener("click", function () {
@@ -263,6 +198,7 @@ document.querySelector("#search").addEventListener("click", function () {
     Country code to use ISO3166. Disabled for now and limited to 1 search term */
 
       const res = await fetch(searchLocation);
+
       const locationData = await res.json();
       //response = wait for fetch data from url
       // location data = parse the data in json format
@@ -271,14 +207,19 @@ document.querySelector("#search").addEventListener("click", function () {
       let lon = locationData[0].lon;
       //Get lat and lon from user input
 
-      document.getElementById("search_location").innerHTML =
-        locationData[0]["name"] + ", " + locationData[0]["country"];
-
       const currentWeatherURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${api_key}&units=metric`;
       const weatherRes = await fetch(currentWeatherURL);
       const weatherData = await weatherRes.json();
 
       console.log(currentWeatherURL);
+      let gmtZone = weatherData["timezone_offset"] / 3600;
+
+      document.getElementById("search_location").innerHTML = `${
+        locationData[0]["name"]
+      }, ${locationData[0]["country"]}, GMT ${
+        gmtZone > 0 ? `+${gmtZone}` : gmtZone
+      }`;
+      // Ternary Operator. If gmtZone is more than 0, add a + sign in front. Otherwise negative numbers will show negative sign anyway
 
       //Current weather data
       let current_temp = Math.ceil(Number(weatherData.current.temp));
@@ -305,9 +246,9 @@ document.querySelector("#search").addEventListener("click", function () {
       document.getElementById("weather_icon").append(icon);
 
       //12 Hour Forecast
-      let forecast_table = document.getElementById("hour_forecast");
       forecast_table.innerHTML = "";
 
+      let forecast_body = document.createElement("tbody");
       for (let i = 0; i < 12; i++) {
         let forecast_row = document.createElement("tr");
         forecast_row.className = `hour_${i}`;
@@ -318,11 +259,13 @@ document.querySelector("#search").addEventListener("click", function () {
         let icon = document.createElement("i");
 
         // Time is stored as Unix
-        let weatherTime = weatherData["hourly"][i]["dt"];
+        let weatherTime =
+          weatherData["hourly"][i]["dt"] + weatherData["timezone_offset"];
         //Convert from Unix by inputting milliseconds into new Date() method. Convert by multiplying by 1000
         weatherTime = weatherTime * 1000;
         weatherTime = new Date(weatherTime);
-        weatherTime = weatherTime.toLocaleTimeString([], {
+        weatherTime = weatherTime.toLocaleString([], {
+          timeZone: "UTC",
           month: "long",
           day: "2-digit",
           hour: "numeric",
@@ -345,13 +288,14 @@ document.querySelector("#search").addEventListener("click", function () {
         forecast_weather.append(icon);
 
         forecast_row.append(forecast_time, forecast_weather, forecast_temp);
-        forecast_table.appendChild(forecast_row);
+        forecast_body.appendChild(forecast_row);
       }
+      forecast_table.appendChild(forecast_body);
 
       // 7 Day Forecast
-      let day_forecast = document.getElementById("day_forecast");
       day_forecast.innerHTML = "";
 
+      let day_forecast_body = document.createElement("tbody");
       for (let i = 1; i < weatherData["daily"].length; i++) {
         let day_forecast_row = document.createElement("tr");
         day_forecast_row.className = `day_${i}`;
@@ -366,7 +310,7 @@ document.querySelector("#search").addEventListener("click", function () {
         //Convert from Unix by inputting milliseconds into new Date() method. Convert by multiplying by 1000
         weatherTime = weatherTime * 1000;
         weatherTime = new Date(weatherTime);
-        weatherTime = weatherTime.toLocaleDateString([], {
+        weatherTime = weatherTime.toLocaleString([], {
           day: "numeric",
           month: "long",
         });
@@ -392,21 +336,35 @@ document.querySelector("#search").addEventListener("click", function () {
           day_forecast_weather,
           day_forecast_temp
         );
-        day_forecast.appendChild(day_forecast_row);
+        day_forecast_body.appendChild(day_forecast_row);
       }
+      day_forecast.appendChild(day_forecast_body);
 
       //Adding event listener to button to toggle
       const tog_button = document.getElementById("toggle_hour_day");
 
       //Making it default such that every new search will display 12h forecast
-      document.getElementById("query_type").innerText = "12-Hour Forecast";
+      query_header.innerText = "12-Hour Forecast (Local Time)";
       day_forecast.classList.add("hidden");
       forecast_table.classList.remove("hidden");
       tog_button.innerText = "Toggle Forecast";
 
-      tog_button.removeEventListener("click", toggleButton);
+      //Enable button
+      tog_button.removeAttribute("disabled");
+      tog_button.classList.remove("btn-secondary");
+      tog_button.classList.add("btn-primary");
+
       //Removes any event listener if there were any previously before adding.
+      tog_button.removeEventListener("click", toggleButton);
       tog_button.addEventListener("click", toggleButton);
+
+      // ---------SPACE-----------
+      //Add favorites button
+      //Commit the current search value (key) and api data(value) into localstorage.
+      //Append to a sidebar list "favorites" for anchor link
+      //Anchor tags should then redirect back to the search data
+
+      //Adding event listener to favorites button and adding favorites list
     } catch (err) {
       console.log(err);
       alert("Please ensure your search term is for a City!");
@@ -414,3 +372,9 @@ document.querySelector("#search").addEventListener("click", function () {
   }
   getLocationWeather();
 });
+
+// Not useful to use geolocation to get user location if only interested in getting country, seems like pinging it from IP is sufficient
+
+function setFavorite() {
+  localStorage.setItem(city_name, weatherData);
+}
