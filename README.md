@@ -18,3 +18,4 @@
 - Include additional search terms to provide for additional specifications in the search query. For example, searching for "Perth" now will only return weather data for the City of Perth in Australia. It is not possible to search for the City of Perth in Scotland for instance. 
 - Include dynamic backgrounds to switch to the corresponding weather condition of the search query
 - Include a favorites list to store past search results 
+- Media queries to cater for mobile users 
