@@ -193,6 +193,7 @@ document.querySelector("#search").addEventListener("click", function () {
   async function getLocationWeather() {
     try {
       const searchLocation = `https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/geo/1.0/direct?q=${city_name}&limit=1&appid=${api_key}`;
+      //https://github.com/Rob--W/cors-anywhere/issues/301 CORS required to get api from HTTPS instead of HTTP
       /*http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
     State code only for US. 
     Country code to use ISO3166. Disabled for now and limited to 1 search term */
