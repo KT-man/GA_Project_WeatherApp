@@ -1,4 +1,3 @@
-"use strict";
 const ip_api =
   "https://ipgeolocation.abstractapi.com/v1/?api_key=19716e399e41408c897fc4b541160cf8";
 
@@ -206,16 +205,43 @@ function toggleButton(toggle_button) {
   }
 }
 
-/*
-const getDayNight = (sunrise, sunset) => {
-      const now = Date.now();
-      if (now> sunrise && now< sunset) {
-        return "day-";
-      } else {
-        return "night-";
-      }
-    };
-*/
+//Loading animation
+function scale(number, loadMin, loadMax, opacityMin, opacityMax) {
+  return (
+    ((number - loadMin) * (opacityMax - opacityMin)) / (loadMax - loadMin) +
+    opacityMin
+  );
+}
+
+let load = 0;
+
+let initialize = setInterval(blurring, 15);
+
+function blurring() {
+  load++;
+  document.querySelector(".loading-text").innerText = `${load}%`;
+  document.querySelector(".loading-text").style.opacity = scale(
+    load,
+    0,
+    100,
+    1,
+    0
+  );
+  document.querySelector(".bg").style.filter = `blur(${scale(
+    load,
+    0,
+    100,
+    30,
+    0
+  )}px)`;
+
+  if (load > 99) {
+    clearInterval(initialize);
+    document
+      .querySelector(".bg")
+      .replaceWith(...document.querySelector(".bg").childNodes);
+  }
+}
 
 //Setting Greeting
 // To add in Timezone and changing to local time
@@ -249,7 +275,7 @@ async function getUserIP() {
         userLocation.innerHTML = `${data.city}, ${data.country}`;
         // If returns undefined, check error code. Probably error code 429 which represents that the API has rate limited user request
 
-        //Add clock
+        //Add clock. Needs to be with userlocation as it uses api data
         const clockTable = document.createElement("table");
         const dateRow = document.createElement("tr");
         const timeRow = document.createElement("tr");
@@ -266,13 +292,17 @@ async function getUserIP() {
           timeNow.toISOString().split("T")[0];
 
           let hours = timeNow.getHours();
+          hours = hours < 10 ? `0${hours}` : hours;
           let min = timeNow.getMinutes();
+          min = min < 10 ? `0${min}` : min;
           let second = timeNow.getSeconds();
+          second = second < 10 ? `0${second}` : second;
           timeRow.innerHTML = `${hours}:${min}:${second}, GMT ${data["timezone"]["abbreviation"]}`;
         }
       });
-  } catch {
-    console.log("An error occurred");
+  } catch (err) {
+    console.log(err);
+    alert("You're going too fast! Slow down and refresh");
   }
 }
 
@@ -316,7 +346,7 @@ document.querySelector("#search").addEventListener("click", function () {
       }, ${locationData[0]["country"]}, GMT ${
         gmtZone > 0 ? `+${gmtZone}` : gmtZone
       }`;
-      // Just trying, ternary operator. If gmtZone is more than 0, add a + sign in front. Otherwise negative numbers will show negative sign anyway
+      // Ternary Operator. If gmtZone is more than 0, add a + sign in front. Otherwise negative numbers will show negative sign anyway
 
       //Current weather data
       let current_temp = Math.ceil(Number(weatherData.current.temp));
@@ -346,6 +376,7 @@ document.querySelector("#search").addEventListener("click", function () {
       let forecast_table = document.getElementById("hour_forecast");
       forecast_table.innerHTML = "";
 
+      let forecast_body = document.createElement("tbody");
       for (let i = 0; i < 12; i++) {
         let forecast_row = document.createElement("tr");
         forecast_row.className = `hour_${i}`;
@@ -385,13 +416,15 @@ document.querySelector("#search").addEventListener("click", function () {
         forecast_weather.append(icon);
 
         forecast_row.append(forecast_time, forecast_weather, forecast_temp);
-        forecast_table.appendChild(forecast_row);
+        forecast_body.appendChild(forecast_row);
       }
+      forecast_table.appendChild(forecast_body);
 
       // 7 Day Forecast
       let day_forecast = document.getElementById("day_forecast");
       day_forecast.innerHTML = "";
 
+      let day_forecast_body = document.createElement("tbody");
       for (let i = 1; i < weatherData["daily"].length; i++) {
         let day_forecast_row = document.createElement("tr");
         day_forecast_row.className = `day_${i}`;
@@ -432,8 +465,9 @@ document.querySelector("#search").addEventListener("click", function () {
           day_forecast_weather,
           day_forecast_temp
         );
-        day_forecast.appendChild(day_forecast_row);
+        day_forecast_body.appendChild(day_forecast_row);
       }
+      day_forecast.appendChild(day_forecast_body);
 
       //Adding event listener to button to toggle
       const tog_button = document.getElementById("toggle_hour_day");

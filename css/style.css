@@ -1,7 +1,25 @@
-body {
-  background-color: darkseagreen;
+.bg {
+  background-image: url(../images/rain/rain_1.jpg);
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  left: px;
+  width: calc(100vw);
+  height: calc(100vh);
+  z-index: -1;
+  filter: blur(30px);
 }
 
+body {
+  background-image: url(../images/rain/rain_1.jpg);
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0px;
+  left: px;
+  width: calc(100vw);
+  height: calc(100vh);
+  color: antiquewhite;
+}
 .container {
   margin-left: auto;
   margin-right: auto;
@@ -10,16 +28,16 @@ body {
 }
 
 #current_div {
-  border: 2px solid black;
-  border-radius: 20px;
+  /* border: 2px solid black;
+  border-radius: 20px; */
   display: inline-block;
   padding: 10px;
   margin: 10px;
 }
 
 #forecast_div {
-  border: 2px solid black;
-  border-radius: 20px;
+  /* border: 2px solid black;
+  border-radius: 20px; */
   display: inline-block;
   padding: 10px;
   margin: 30px;
@@ -35,6 +53,8 @@ table {
 
 td {
   text-align: right;
+
+  border-radius: 5px;
 }
 
 #seven_day {
@@ -54,4 +74,13 @@ td {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.loading-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+  color: wheat;
 }
