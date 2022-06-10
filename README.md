@@ -1,9 +1,7 @@
 # GA_Project_WeatherApp
 
 ## IMPORTANT
-> **_NOTE:_**  The app is not able to function properly because of Cross-Origin Resource Sharing issues, where the page is hosted securely on github (https) but the free OpenWeatherMap API does not provide SSL support (unsecured). 
-
-As such, the page will not load weather data properly. A hotfix is available through the heroku CORS-anywhere project, but will require manual intervention to get it to work. To enable CORS, you will have to manually enable the heroku app by visiting https://cors-anywhere.herokuapp.com/ to enable it to work on your browser. Then, reload the weather app page for data to be pulled from the OpenWeatherMap API.
+> **_NOTE:_**  The app is not able to function properly because of Cross-Origin Resource Sharing issues, where the page is hosted securely on github (https) but the free OpenWeatherMap API does not provide SSL support (unsecured). As such, the page will not load weather data properly. A hotfix is available through the heroku CORS-anywhere project, but will require manual intervention to get it to work. To enable CORS, you will have to manually enable the heroku app by visiting https://cors-anywhere.herokuapp.com/ to enable it to work on your browser. Then, reload the weather app page for data to be pulled from the OpenWeatherMap API.
 
 ## Weather Application in HTML, CSS, JS
 - Weather application that pulls data from the Open Weather Map API, available here - https://openweathermap.org/api/one-call-api
