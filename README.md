@@ -1,5 +1,7 @@
 # GA_Project_WeatherApp
 
+> **_NOTE:_**  The note content.
+
 ## Weather Application in HTML, CSS, JS
 - Weather application that pulls data from the Open Weather Map API, available here - https://openweathermap.org/api/one-call-api
 - Application also pulls location data by utilizing the AbstractAPI for IP Geolocation, available here - https://app.abstractapi.com/api/ip-geolocation/documentation
